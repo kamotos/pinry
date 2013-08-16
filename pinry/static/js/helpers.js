@@ -62,3 +62,18 @@ function getUrlParameter(name) {
     if (decode == 'null') return null;
     else return decode;
 }
+
+
+function getYoutubeId(url) {
+    var videoId = url.split('v=')[1];
+    var ampersandPosition = videoId.indexOf('&');
+    if(ampersandPosition != -1) {
+        videoId = videoId.substring(0, ampersandPosition);
+    }
+    return videoId;
+}
+
+
+function getYoutubeImage(videoId) {
+    return 'https://img.youtube.com/vi/' + videoId + '/maxresdefault.jpg';
+}

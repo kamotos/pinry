@@ -44,6 +44,7 @@ class Pin(models.Model):
     image = models.ForeignKey(Image, related_name='pin')
     published = models.DateTimeField(auto_now_add=True)
     tags = TaggableManager()
+    youtube = models.CharField(max_length=15, blank=True, null=True)
 
     def __unicode__(self):
         return self.url

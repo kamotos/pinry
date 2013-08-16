@@ -3,7 +3,11 @@
         <div class="lightbox-background">
             <div class="lightbox-wrapper">
                 <div class="lightbox-image-wrapper">
-                    <img class="lightbox-image" src="{{image.standard.image}}" />
+                    {{#if youtube}}
+                        <iframe class="lightbox-youtube" src="//www.youtube.com/embed/{{youtube}}" frameborder="0" allowfullscreen></iframe>
+                    {{else}}
+                        <img class="lightbox-image" src="{{image.standard.image}}" />
+                    {{/if}}
                 </div>
                 <div class="lightbox-data clearfix">
                 {{#if description}}

@@ -51,9 +51,14 @@ $(window).load(function() {
         box.css('height', $(document).height());
         $('.lightbox-image-wrapper').css('height', context.image.standard.height);
         box.fadeIn(200);
-        $('.lightbox-image').load(function() {
-            $(this).fadeIn(200);
-        });
+        if (context.youtube) {
+            $('.lightbox-youtube').width(context.image.standard.width);
+            $('.lightbox-youtube').height(context.image.standard.height);
+        } else {
+            $('.lightbox-image').load(function() {
+                $(this).fadeIn(200);
+            });
+        }
         $('.lightbox-wrapper').css({
             'width': context.image.standard.width,
             'margin-top': 70,

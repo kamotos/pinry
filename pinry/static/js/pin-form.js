@@ -11,6 +11,7 @@
 $(window).load(function() {
     var uploadedImage = false;
     var editedPin = null;
+    var youtubeId = false;
 
     // Start Helper Functions
     function getFormData() {
@@ -60,8 +61,8 @@ $(window).load(function() {
     function createPinForm(editPinId) {
         $('body').append(renderTemplate('#pin-form-template', ''));
         var modal = $('#pin-form'),
-            formFields = [$('#pin-form-image-url'), $('#pin-form-description'),
-            $('#pin-form-tags')],
+            formFields = [$('#pin-form-image-url'), $('#pin-form-youtube-url'),
+            $('#pin-form-description'), $('#pin-form-tags')],
             pinFromUrl = getUrlParameter('pin-image-url');
         // If editable grab existing data
         if (editPinId) {
@@ -71,6 +72,7 @@ $(window).load(function() {
                 $('#pin-form-image-url').val(editedPin.image.thumbnail.image);
                 $('#pin-form-image-url').parent().parent().hide();
                 $('#pin-form-image-upload').parent().parent().hide();
+                $('#pin-form-youtube-url').parent().parent().hide();
                 $('#pin-form-description').val(editedPin.description);
                 $('#pin-form-tags').val(editedPin.tags);
                 createPinPreviewFromForm();
@@ -87,8 +89,16 @@ $(window).load(function() {
                 }, 700);
                 if (!uploadedImage)
                     $('#pin-form-image-upload').parent().parent().fadeOut(300);
+                if (!youtubeId)
+                    $('#pin-form-youtube-url').parent().parent().fadeOut(300);
             });
         }
+        // Youtube video add
+        $('#pin-form-youtube-url').bind('propertychange keyup input paste', function() {
+            youtubeId = getYoutubeId($(this).val())
+            $('#pin-form-image-url').parent().parent().fadeOut(300);
+            $('#pin-form-image-url').val(getYoutubeImage(youtubeId));
+        });
         // Drag and Drop Upload
         $('#pin-form-image-upload').fineUploader({
             request: {
@@ -104,6 +114,7 @@ $(window).load(function() {
             }
         }).on('complete', function(e, id, name, data) {
             $('#pin-form-image-url').parent().parent().fadeOut(300);
+            $('#pin-form-youtube-url').parent().parent().fadeOut(300);
             $('.qq-upload-button').css('display', 'none');
             var promise = getImageData(data.success.id);
             uploadedImage = data.success.id;
@@ -118,6 +129,7 @@ $(window).load(function() {
         // If bookmarklet submit
         if (pinFromUrl) {
             $('#pin-form-image-upload').parent().parent().css('display', 'none');
+            $('#pin-form-youtube-upload').parent().parent().css('display', 'none');
             $('#pin-form-image-url').val(pinFromUrl);
             $('.navbar').css('display', 'none');
             modal.css({
@@ -166,6 +178,7 @@ $(window).load(function() {
                 };
                 if (uploadedImage) data.image = '/api/v1/image/'+uploadedImage+'/';
                 else data.url = $('#pin-form-image-url').val();
+                if (youtubeId) data.youtube = youtubeId;
                 var promise = postPinData(data);
                 promise.success(function(pin) {
                     if (pinFromUrl) return window.close();
