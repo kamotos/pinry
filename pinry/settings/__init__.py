@@ -12,7 +12,7 @@ SITE_NAME = 'Pinry'
 # Set to False to disable people from creating new accounts.
 ALLOW_NEW_REGISTRATIONS = True
 
-# Set to False to force users to login before seeing any pins. 
+# Set to False to force users to login before seeing any pins.
 PUBLIC = True
 
 
@@ -88,6 +88,14 @@ INSTALLED_APPS = (
     'django_images',
     'pinry.core',
     'pinry.users',
+    'social_auth'
+)
+
+AUTHENTICATION_BACKENDS = (
+    'pinry.users.auth.backends.CombinedAuthBackend',
+    'social_auth.backends.twitter.TwitterBackend',
+    'social_auth.backends.facebook.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 IMAGE_PATH = 'pinry.core.utils.upload_path'
@@ -96,3 +104,8 @@ IMAGE_SIZES = {
     'standard': {'size': [600, 0]},
     'square': {'crop': True, 'size': [125, 125]},
 }
+
+TWITTER_CONSUMER_KEY         = ''
+TWITTER_CONSUMER_SECRET      = ''
+FACEBOOK_APP_ID              = ''
+FACEBOOK_API_SECRET          = ''
